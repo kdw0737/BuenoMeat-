@@ -1,0 +1,13 @@
+/* custom-toastify-style.css */
+
+/* Toastify 스타일 수정 */
+.Toastify__toast {
+    white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+    overflow: hidden; /* 넘치는 내용을 숨김 */
+    width: fit-content;
+    padding-left: 20;
+    padding-right: 20;
+    display: flex; /* Flexbox를 사용하여 아이콘을 오른쪽에 정렬 */
+    justify-content: space-between; /* 아이콘과 텍스트 사이를 최대한 확보 */
+    align-items: center; /* 수직 방향 가운데 정렬 */
+}

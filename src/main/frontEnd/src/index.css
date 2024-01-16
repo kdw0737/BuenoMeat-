@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Cafe24Shiningstar";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Shiningstar.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+@layer base {
+  li {
+    @apply pb-4 cursor-pointer hover:border-b-4 border-black
+  }
+
+  button {
+    @apply w-full py-3 transition bg-white border rounded-lg disabled:opacity-70 disabled:cursor-not-allowed hover:opacity-80 hover:border-black text-black font-semibold
+  }
+
+  hr {
+    @apply w-full h-[2px] bg-gray-300
+  }
+
+  /* tr {
+    @apply border-b border-black
+  } */
+
+  th, td {
+    @apply border-black font-light text-black px-2 py-2
+  } 
+}
