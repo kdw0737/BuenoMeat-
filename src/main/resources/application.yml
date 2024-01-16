@@ -10,6 +10,18 @@ jwt:
     header: Authorization-refresh
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: kdw981129@gmail.com
+    password: dswutacqunpqoyng
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    auth-code-expiration-millis: 30000  # 5 * 60 * 1000 == 5분
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://bueno-mysql.cncu2ge0ew83.ap-northeast-2.rds.amazonaws.com:3306/bueno_mysql?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
