@@ -35,7 +35,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             // Member의 Role이 GUEST일 경우 처음 요청한 회원이므로 추가 회원가입 페이지로 리다이렉트
             if(oAuth2User.getRole() == MemberRole.GUEST) {
                 String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
-                String redirectUrl = "http://localhost:3000/auth/socialJoin?accessToken=" + accessToken;
+                //String redirectUrl = "http://localhost:3000/auth/socialJoin?accessToken=" + accessToken;
+                String redirectUrl = "http://bueno-meat.s3-website.ap-northeast-2.amazonaws.com/auth/socialJoin?accessToken=" + accessToken;
                 response.sendRedirect(redirectUrl); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
                 log.info("추가 정보 입력으로 리다이렉트");
 
@@ -55,7 +56,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private void loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User) throws IOException {
         String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
         String refreshToken = jwtService.createRefreshToken();
-        String redirectUrl = "http://localhost:3000/some/path?accessToken=" + accessToken + "&refreshToken=" + refreshToken;
+        //String redirectUrl = "http://localhost:3000/some/path?accessToken=" + accessToken + "&refreshToken=" + refreshToken;
+        String redirectUrl = "http://bueno-meat.s3-website.ap-northeast-2.amazonaws.com/some/path?accessToken=" + accessToken + "&refreshToken=" + refreshToken;
         response.sendRedirect(redirectUrl);
         log.info("토큰을 쿼리 스트링으로 전달하여 리다이렉트");
 
