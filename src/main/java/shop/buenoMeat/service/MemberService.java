@@ -41,7 +41,7 @@ public class MemberService{
         List<WishList> findWishLists = wishListRepository.findAllByMemberId(findMember.getId());
         if (passwordEncoder.matches(pw, findMember.getPw())) { // 비밀번호가 올바른 경우
             LoginDto.loginResponseDto loginResponseDto= new LoginDto.loginResponseDto(
-                    "로그인이 성공하였습니다.", findMember.getNickname(),findMember.getId(),findWishLists);
+                    "로그인이 성공하였습니다.", findMember.getNickname(),findMember.getId(),findMember.getPoint(),findWishLists);
             return ResponseEntity.ok(loginResponseDto);
         } else { // 비밀번호가 틀린 경우
             return ResponseEntity.notFound().build();
