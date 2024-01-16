@@ -25,6 +25,7 @@ public class LoginDto {
         private String msg;
         private String nickname;
         private Long id;
+        private int point;
         private List<WishList> wishListItems;
     }
 
