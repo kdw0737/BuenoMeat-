@@ -1,15 +1,18 @@
 package shop.buenoMeat.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import shop.buenoMeat.domain.*;
 import shop.buenoMeat.dto.AdminDto;
 import shop.buenoMeat.dto.ConvertToDto;
 import shop.buenoMeat.dto.QnaDto;
 import shop.buenoMeat.repository.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -17,12 +20,15 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AdminService {
+@Slf4j
+public class AdminService{
     private final MemberRepository memberRepository;
     private final ItemQnaRepository itemQnaRepository;
     private final ItemAnswerRepository itemAnswerRepository;
     private final CategoryRepository categoryRepository;
     private final ItemRepository itemRepository;
+
+    private final S3UploadService s3UploadService;
 
     //-- 관리자 로그인 --//
     public ResponseEntity adminLogin(AdminDto.adminLoginRequestDto adminLoginRequestDto){
@@ -68,13 +74,18 @@ public class AdminService {
 
     //-- 관리자 페이지에서 상품 등록하기 --//
     @Transactional
-    public void enrollItem(AdminDto.enrollItemDto enrollItemDto) {
+    public void enrollItem(AdminDto.enrollItemDto enrollItemDto, MultipartFile image) throws IOException {
+        String storedFileName = null;
         CategoryName categoryName = checkCategory(enrollItemDto);
         Category category = Category.createCategory(categoryName);
         categoryRepository.save(category);
+        if (!image.isEmpty()) {
+            storedFileName = s3UploadService.upload(image, "image");
+        }
         Item item = Item.createItem(category, enrollItemDto.getInfo(), enrollItemDto.getName(), enrollItemDto.getPrice(), enrollItemDto.getStock(),
                 enrollItemDto.getWeight(), enrollItemDto.getWeightUnit());
         itemRepository.save(item);
+        log.info("상품 등록 성공");
     }
 
     //-- 관리자 페이지에서 상품 수정하기 --//

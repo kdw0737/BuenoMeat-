@@ -82,3 +82,14 @@ spring:
 logging:
   level:
     org.springframework: DEBUG
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVXX7SSZKBKKDEIQ3
+      secretKey: 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
+    s3:
+      bucket: buenoimg
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

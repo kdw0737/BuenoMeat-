@@ -1,4 +1,4 @@
-package shop.buenoMeat.config.auth;
+package shop.buenoMeat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
