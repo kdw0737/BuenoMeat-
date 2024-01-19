@@ -54,7 +54,7 @@ public class Item {
 
     private Integer soldQuantity; // 판매수량, 판매량이 없는경우 0 or null
 
-    public Item(Category category, String info, String name, int price, int stock, String weight, String weightUnit) {
+    public Item(Category category, String info, String name, int price, int stock, String weight, String weightUnit, String image) {
         this.category = category;
         this.info = info;
         this.name = name;
@@ -64,11 +64,12 @@ public class Item {
         this.weightUnit = weightUnit;
         this.enrolled = LocalDateTime.now();
         this.soldQuantity = 0;
+        this.image = image;
     }
 
     //-- 생성 메서드 --//
-    public static Item createItem(Category category, String info, String name, int price, int stock, String weight, String weightUnit) {
-        return new Item(category, info, name, price, stock, weight, weightUnit);
+    public static Item createItem(Category category, String info, String name, int price, int stock, String weight, String weightUnit, String image) {
+        return new Item(category, info, name, price, stock, weight, weightUnit, image);
     }
 
     //-- 수정 메서드 --//

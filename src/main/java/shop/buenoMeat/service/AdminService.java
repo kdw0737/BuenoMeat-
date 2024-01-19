@@ -83,7 +83,7 @@ public class AdminService{
             storedFileName = s3UploadService.upload(image, "image");
         }
         Item item = Item.createItem(category, enrollItemDto.getInfo(), enrollItemDto.getName(), enrollItemDto.getPrice(), enrollItemDto.getStock(),
-                enrollItemDto.getWeight(), enrollItemDto.getWeightUnit());
+                enrollItemDto.getWeight(), enrollItemDto.getWeightUnit(), storedFileName);
         itemRepository.save(item);
         log.info("상품 등록 성공");
     }
