@@ -3,6 +3,7 @@ package shop.buenoMeat.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import shop.buenoMeat.domain.*;
 import shop.buenoMeat.dto.ConvertToDto;
 import shop.buenoMeat.dto.ItemDto;
@@ -13,6 +14,7 @@ import shop.buenoMeat.repository.MemberRepository;
 import shop.buenoMeat.repository.ItemReviewRepository;
 import shop.buenoMeat.repository.OrderItemRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +28,9 @@ public class ItemReviewService {
     private final MemberRepository memberRepository;
     private final ItemReviewRepository itemReviewRepository;
     private final OrderItemRepository orderItemRepository;
+    private final S3UploadService s3UploadService;
+
+
     //-- 리뷰내역(마이페이지) 불러오기 --//
     public ItemDto.getReviewFormPage getReviewFormPage(Long memberId) {
         Member findMember = memberRepository.findOne(memberId);
@@ -44,11 +49,15 @@ public class ItemReviewService {
 
     @Transactional
     //-- 리뷰 작성하기 --//
-    public void enrollReview(Long memberId, Long itemId, ItemDto.enrollReviewDto enrollReviewDto) {
+    public void enrollReview(Long memberId, Long itemId, ItemDto.enrollReviewDto enrollReviewDto, MultipartFile image) throws IOException {
         Item findItem = itemRepository.findOne(itemId);
         Member findMember = memberRepository.findOne(memberId);
+        String storedFileName = null;
+        if (!image.isEmpty()) {
+            storedFileName = s3UploadService.upload(image, "image");
+        }
         ItemReview itemReview = ItemReview.createReview(findItem, findMember, enrollReviewDto.getComment(),
-                enrollReviewDto.getStarRating(), enrollReviewDto.getReviewImage());
+                enrollReviewDto.getStarRating(), storedFileName);
         itemReviewRepository.save(itemReview);
 
         //작성 완료 상태로 바꾸어주기
