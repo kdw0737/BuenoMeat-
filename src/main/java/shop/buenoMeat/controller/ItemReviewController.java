@@ -27,8 +27,8 @@ public class ItemReviewController {
     //-- 리뷰 작성하기 --//
     @PostMapping(value = "/{memberId}/{itemId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> enrollReview(@PathVariable Long memberId, @PathVariable Long itemId,
-                                               @RequestPart ItemDto.enrollReviewDto enrollReviewDto,
-                                               @RequestPart MultipartFile file) throws IOException {
+                                               @RequestPart(value = "data") ItemDto.enrollReviewDto enrollReviewDto,
+                                               @RequestPart(value = "image") MultipartFile file) throws IOException {
         itemReviewService.enrollReview(memberId, itemId, enrollReviewDto,file);
         return ResponseEntity.ok("상품리뷰등록이 완료되었습니다.");
     }
