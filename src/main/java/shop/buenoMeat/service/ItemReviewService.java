@@ -1,6 +1,7 @@
 package shop.buenoMeat.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ItemReviewService {
 
     private final ItemRepository itemRepository;
@@ -52,9 +54,11 @@ public class ItemReviewService {
     public void enrollReview(Long memberId, Long itemId, ItemDto.enrollReviewDto enrollReviewDto, MultipartFile image) throws IOException {
         Item findItem = itemRepository.findOne(itemId);
         Member findMember = memberRepository.findOne(memberId);
-        String storedFileName = null;
+        String storedFileName = "이미지 없음";
         if (!image.isEmpty()) {
             storedFileName = s3UploadService.upload(image, "image");
+        } else {
+            log.info("리뷰 사진없이 글만 저장합니다.");
         }
         ItemReview itemReview = ItemReview.createReview(findItem, findMember, enrollReviewDto.getComment(),
                 enrollReviewDto.getStarRating(), storedFileName);

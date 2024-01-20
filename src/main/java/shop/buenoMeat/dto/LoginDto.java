@@ -47,5 +47,6 @@ public class LoginDto {
         private String msg;
         private Long id;
         private String nickname;
+        private int point;
     }
 }

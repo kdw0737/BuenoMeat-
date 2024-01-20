@@ -40,19 +40,19 @@ public class ItemReview {
     @Column(name = "rev_image")
     private String image;
 
-    public ItemReview(Item item, Member member, String comment, int starRating, String image) {
+    public ItemReview(Item item, Member member, String comment, int starRating) {
         this.item = item;
         this.member = member;
         this.comment = comment;
         this.reviewTime = LocalDateTime.now();
         this.starRating = starRating;
         this.recommend = 0;
-        this.image = image;
     }
 
     //-- 생성 메서드 --//
     public static ItemReview createReview(Item item, Member member, String comment, int starRating, String image) {
-        ItemReview itemReview = new ItemReview(item, member, comment, starRating, image);
+        ItemReview itemReview = new ItemReview(item, member, comment, starRating);
+        itemReview.changeImage(image);
         member.addPoint(500); // 리뷰 적립금 500원
         return itemReview;
     }

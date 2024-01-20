@@ -120,9 +120,9 @@ public class MemberService{
     //-- 토큰 유효성 확인 및 데이터 전달 --//
     public LoginDto.socialLoginResponse checkTokenSocialLogin(String email) {
         Member member = memberRepository.findByEmail(email).get(0);
-        LoginDto.socialLoginResponse socialLoginResponse = new LoginDto.socialLoginResponse(
-                "로그인에 성공하였습니다", member.getId(), member.getNickname()
+        return new LoginDto.socialLoginResponse(
+                "로그인에 성공하였습니다", member.getId(), member.getNickname(),member.getPoint()
         );
-        return socialLoginResponse;
     }
+
 }
