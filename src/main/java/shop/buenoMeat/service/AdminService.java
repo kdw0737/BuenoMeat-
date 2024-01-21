@@ -28,7 +28,7 @@ public class AdminService{
     private final CategoryRepository categoryRepository;
     private final ItemRepository itemRepository;
 
-    private final S3UploadService s3UploadService;
+    private final S3Service s3Service;
 
     //-- 관리자 로그인 --//
     public ResponseEntity adminLogin(AdminDto.adminLoginRequestDto adminLoginRequestDto){
@@ -80,7 +80,7 @@ public class AdminService{
         Category category = Category.createCategory(categoryName);
         categoryRepository.save(category);
         if (!image.isEmpty()) {
-            storedFileName = s3UploadService.upload(image, "image");
+            storedFileName = s3Service.upload(image, "image");
         }
         Item item = Item.createItem(category, enrollItemDto.getInfo(), enrollItemDto.getName(), enrollItemDto.getPrice(), enrollItemDto.getStock(),
                 enrollItemDto.getWeight(), enrollItemDto.getWeightUnit(), storedFileName);

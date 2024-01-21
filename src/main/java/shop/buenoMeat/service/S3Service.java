@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class S3UploadService {
+public class S3Service {
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -64,5 +64,18 @@ public class S3UploadService {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    // DB에 저장된 S3 URL을 받아와서 해당 이미지를 S3에서 삭제
+    public void delete(String s3Url) {
+        String fileName = extractFileNameFromUrl(s3Url);
+        log.info("삭제 파일 추출 명:{}", fileName);
+        amazonS3Client.deleteObject(bucket, fileName);
+        log.info("S3 이미지가 삭제되었습니다. URL: {}", s3Url);
+    }
+
+    private String extractFileNameFromUrl(String s3Url) {
+        // S3 URL에서 파일명을 추출하여 반환
+        return "image/" + s3Url.substring(s3Url.lastIndexOf("/") + 1);
     }
 }
