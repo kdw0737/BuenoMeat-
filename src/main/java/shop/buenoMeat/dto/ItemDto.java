@@ -165,7 +165,6 @@ public class ItemDto {
     public static class updateReviewDto {
         private int starRating;
         private String comment;
-        private String reviewImage;
     }
 
 }

@@ -92,10 +92,16 @@ public class ItemReviewService {
 
     @Transactional
     //-- 리뷰 수정하기 --//
-    public void updateReview(Long reviewId, ItemDto.updateReviewDto updateReviewDto) {
+    public void updateReview(Long reviewId, ItemDto.updateReviewDto updateReviewDto, MultipartFile image) throws IOException {
         ItemReview findReview = itemReviewRepository.findByReviewId(reviewId);
         findReview.changeComment(updateReviewDto.getComment());
-        findReview.changeImage(updateReviewDto.getReviewImage());
+        String storedFileName = "이미지 없음";
+        if (!image.isEmpty()) {
+            storedFileName = s3Service.upload(image, "image");
+        } else {
+            log.info("리뷰 사진없이 글만 저장합니다.");
+        }
+        findReview.changeImage(storedFileName);
         findReview.changeStarRating(updateReviewDto.getStarRating());
     }
 
