@@ -80,7 +80,7 @@ public class Item {
     public void changeStock(int stock){ this.stock = stock; }
     public void changeWeight(String weight){ this.weight = weight; }
     public void changeWeightUnit(String weightUnit){ this.weightUnit = weightUnit; }
-
+    public void changeSoldQuantity(int soldQuantity){ this.soldQuantity = soldQuantity; }
 
     /***
      * 재고 감소

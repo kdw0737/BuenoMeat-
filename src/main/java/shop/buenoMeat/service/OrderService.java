@@ -57,6 +57,9 @@ public class OrderService {
             orderItems.add(orderItem);
             findMember.usePoint(orderItem.getUsePoint()); // 포인트 사용
             earnPoint += orderItem.getEarnPoint();
+
+            //판매한 아이템 판매량 증가
+            findItem.changeSoldQuantity(findItem.getSoldQuantity() + orderItem.getCount());
         }
         Order order = Order.createOrder(findMember, orderRequestDto.getRecipient(), orderRequestDto.getPhone(),
                 orderRequestDto.getEmail(), orderRequestDto.getAddress(), orderRequestDto.getDetailAddress(),
@@ -99,6 +102,9 @@ public class OrderService {
         // 상품 재고 증가
         Item findItem = itemRepository.findOne(itemId);
         findItem.addStock(findOrderItem.getCount());
+
+        //판매량 감소
+        findItem.changeSoldQuantity(findItem.getSoldQuantity() - findOrderItem.getCount());
 
          // 주문 상태 변경
         findOrderItem.changeOrderStatus(OrderItemStatus.CANCEL);
