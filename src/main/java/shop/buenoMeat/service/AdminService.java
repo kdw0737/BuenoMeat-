@@ -13,6 +13,7 @@ import shop.buenoMeat.dto.QnaDto;
 import shop.buenoMeat.repository.*;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -79,8 +80,10 @@ public class AdminService{
         CategoryName categoryName = checkCategory(enrollItemDto);
         Category category = Category.createCategory(categoryName);
         categoryRepository.save(category);
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             storedFileName = s3Service.upload(image, "image");
+        } else {
+            throw new NoSuchFileException("등록양식에 사진이 없습니다.");
         }
         Item item = Item.createItem(category, enrollItemDto.getInfo(), enrollItemDto.getName(), enrollItemDto.getPrice(), enrollItemDto.getStock(),
                 enrollItemDto.getWeight(), enrollItemDto.getWeightUnit(), storedFileName);

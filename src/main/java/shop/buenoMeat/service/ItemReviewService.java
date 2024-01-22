@@ -52,7 +52,7 @@ public class ItemReviewService {
         Item findItem = itemRepository.findOne(itemId);
         Member findMember = memberRepository.findOne(memberId);
         String storedFileName = "이미지 없음";
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             storedFileName = s3Service.upload(image, "image");
         } else {
             log.info("리뷰 사진없이 글만 저장합니다.");
@@ -96,7 +96,7 @@ public class ItemReviewService {
         ItemReview findReview = itemReviewRepository.findByReviewId(reviewId);
         findReview.changeComment(updateReviewDto.getComment());
         String storedFileName = "이미지 없음";
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             storedFileName = s3Service.upload(image, "image");
         } else {
             log.info("리뷰 사진없이 글만 저장합니다.");
