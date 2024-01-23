@@ -3,10 +3,7 @@ package shop.buenoMeat.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.buenoMeat.domain.Item;
-import shop.buenoMeat.domain.ItemAnswer;
-import shop.buenoMeat.domain.ItemQna;
-import shop.buenoMeat.domain.Member;
+import shop.buenoMeat.domain.*;
 import shop.buenoMeat.dto.ConvertToDto;
 import shop.buenoMeat.dto.QnaDto;
 import shop.buenoMeat.repository.ItemAnswerRepository;
@@ -49,7 +46,13 @@ public class ItemQnaService {
             throw new RuntimeException("해당 문의글이 존재하지 않습니다.");
         } else { // 문의글을 찾은 경우
             if (findQna.get().getMember().getId().equals(memberId)) { // 자신이 작성한 글이 맞는 경우
-                itemQnaRepository.delete(findQna.get());
+                if (findQna.get().getQnaStatus().equals(QnaStatus.WAITING)) { //답변 대기중이면 바로 삭제 가능
+                    itemQnaRepository.delete(findQna.get());
+                } else {// 답변 완료상태면 답변먼저 지우고 문의 삭제
+                    ItemAnswer findItemAnwer = itemAnswerRepository.findByItemQnaId(findQna.get().getId());
+                    itemAnswerRepository.delete(findItemAnwer);
+                    itemQnaRepository.delete(findQna.get());
+                }
             } else { // 자신이 작성한 글이 아닌 경우
                 throw new RuntimeException("자신이 작성한 글만 삭제할 수 있습니다");
             }

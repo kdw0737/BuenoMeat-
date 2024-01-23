@@ -24,10 +24,10 @@ public class Item {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ItemReview> itemReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ItemQna> itemQnas = new ArrayList<>();
 
     @Column(nullable = false)

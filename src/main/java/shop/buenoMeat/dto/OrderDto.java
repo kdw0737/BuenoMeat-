@@ -18,6 +18,7 @@ public class OrderDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class orderPageResponseDto {
+        private Long cartId;
         private List<ItemDto.getCartDto> orderItemList;
         private orderMemberInfo orderMemberInfo;
     }

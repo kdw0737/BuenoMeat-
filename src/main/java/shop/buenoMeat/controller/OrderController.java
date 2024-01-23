@@ -25,9 +25,9 @@ public class OrderController {
     }
 
     //-- 주문하기 --//
-    @PostMapping("/{memberId}")
-    public ResponseEntity<OrderDto.orderResponseDto> Order(@PathVariable Long memberId, @RequestBody OrderDto.orderRequestDto orderRequestDto) {
-        Long orderId = orderService.order(memberId, orderRequestDto);
+    @PostMapping("/{memberId}/{cartId}")
+    public ResponseEntity<OrderDto.orderResponseDto> Order(@PathVariable Long memberId, @PathVariable Long cartId, @RequestBody OrderDto.orderRequestDto orderRequestDto) {
+        Long orderId = orderService.order(memberId, cartId, orderRequestDto);
         return ResponseEntity.ok(new OrderDto.orderResponseDto("주문이 완료되었습니다.", orderId));
     }
 

@@ -36,13 +36,12 @@ public class OrderService {
         List<ItemDto.getCartDto> orderItemList = findAllCartItem.stream()
                 .map(ConvertToDto::convertToGetCartDto)
                 .collect(Collectors.toList());
-        return new OrderDto.orderPageResponseDto(orderItemList, orderMemberInfo);
+        return new OrderDto.orderPageResponseDto(findCart.getId(), orderItemList, orderMemberInfo);
     }
-
 
     //-- 주문하기 --// TODO:: 포인트 적립에 관한 부분 처리 (완료 ? 테스트 필요 )
     @Transactional
-    public Long order(Long memberId, OrderDto.orderRequestDto orderRequestDto) {
+    public Long order(Long memberId, Long cartId, OrderDto.orderRequestDto orderRequestDto) {
         Member findMember = memberRepository.findOne(memberId);
         Map<Long, Integer> itemAndPoint = orderRequestDto.getItemAndPoint(); // Key: 상품 ID, Value: 사용한 포인트
         List<OrderItem> orderItems = new ArrayList<>(); // 주문된 상품 리스트
@@ -50,7 +49,7 @@ public class OrderService {
 
         for (Long itemId : itemAndPoint.keySet()) {
             Item findItem = itemRepository.findOne(itemId);
-            CartItem findCartItem = cartItemRepository.findByItemId(itemId);
+            CartItem findCartItem = cartItemRepository.findByCartIdAndItemId(cartId, itemId);
             OrderItem orderItem = OrderItem.createOrderItem(findItem, findCartItem.getItemCount(),
                     findCartItem.getItemOption(), findCartItem.getTotalPrice(), itemAndPoint.get(itemId));
             orderItemRepository.save(orderItem);

@@ -28,6 +28,7 @@ public class AdminService{
     private final ItemAnswerRepository itemAnswerRepository;
     private final CategoryRepository categoryRepository;
     private final ItemRepository itemRepository;
+    private final CartItemRepository cartItemRepository;
 
     private final S3Service s3Service;
 
