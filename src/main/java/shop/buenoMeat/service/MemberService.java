@@ -128,6 +128,9 @@ public class MemberService{
     //-- 리프레쉬 토큰 삭제 --//
     public void logout(String refreshToken, Long memberId) {
         Member findMember = memberRepository.findOne(memberId);
+        if (!findMember.getRefreshToken().equals(refreshToken)) { //만약 refreshToken이 일치하지 않으면
+            throw new IllegalArgumentException("refreshToken 이 일치하지 않습니다.");
+        }
         findMember.updateRefreshToken("");
     }
 }

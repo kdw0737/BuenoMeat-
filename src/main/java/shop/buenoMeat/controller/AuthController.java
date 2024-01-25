@@ -66,7 +66,6 @@ public class AuthController {
     @PostMapping("/logout/{memberId}")
     public String logout(HttpServletRequest request, @PathVariable Long memberId) {
         Optional<String> refreshToken = jwtService.extractRefreshToken(request);
-
         if (refreshToken.isEmpty()) { // refreshToken이 존재하지 않는 경우
             throw new NoSuchElementException("refreshToken이 존재하지 않습니다.");
         } else { //refreshToken 이 존재하는 경우
