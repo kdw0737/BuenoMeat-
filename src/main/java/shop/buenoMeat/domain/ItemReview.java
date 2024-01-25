@@ -41,9 +41,6 @@ public class ItemReview {
     @Column(name = "rev_image")
     private String image;
 
-    @Column(name = "rcm_list")
-    private List<Long> rcmList;
-
     public ItemReview(Item item, Member member, String comment, int starRating) {
         this.item = item;
         this.member = member;
