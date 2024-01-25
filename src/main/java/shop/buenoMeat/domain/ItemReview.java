@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,6 +40,9 @@ public class ItemReview {
 
     @Column(name = "rev_image")
     private String image;
+
+    @Column(name = "rcm_list")
+    private List<Long> rcmList;
 
     public ItemReview(Item item, Member member, String comment, int starRating) {
         this.item = item;

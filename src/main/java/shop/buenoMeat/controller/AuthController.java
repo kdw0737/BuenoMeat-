@@ -12,6 +12,7 @@ import shop.buenoMeat.exception.AccessTokenNotExistException;
 import shop.buenoMeat.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -45,7 +46,6 @@ public class AuthController {
     //-- 토큰 유효성 확인 및 데이터 전달 --//
     @PostMapping("/socialLogin/token")
     public ResponseEntity<LoginDto.socialLoginResponse> checkTokenSocialLogin(HttpServletRequest request) {
-
         //accessToken 추출
         Optional<String> accessToken = jwtService.extractAccessToken(request);
 
@@ -56,9 +56,22 @@ public class AuthController {
             if (email.isEmpty()) { // 이메일이 비어있으면
                 log.info("이메일이 비어있습니다.");
                 return ResponseEntity.status(401).build();
-            } else { // 이메일이 존재하면
+            } else { // 이메일이 존재하는 경우
                 return ResponseEntity.ok(memberService.checkTokenSocialLogin(email.get()));
             }
+        }
+    }
+
+    //-- 로그아웃 (refreshToken 삭제 ) --//
+    @PostMapping("/logout/{memberId}")
+    public String logout(HttpServletRequest request, @PathVariable Long memberId) {
+        Optional<String> refreshToken = jwtService.extractRefreshToken(request);
+
+        if (refreshToken.isEmpty()) { // refreshToken이 존재하지 않는 경우
+            throw new NoSuchElementException("refreshToken이 존재하지 않습니다.");
+        } else { //refreshToken 이 존재하는 경우
+            memberService.logout(refreshToken.get(), memberId);
+            return "로그아웃이 완료되었습니다.";
         }
     }
 }
