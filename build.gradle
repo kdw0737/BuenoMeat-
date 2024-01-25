@@ -37,6 +37,7 @@ dependencies {
 	implementation 'com.auth0:java-jwt:4.2.1'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 	//JUNIT 추가
 	testImplementation("org.junit.vintage:junit-vintage-engine:"){
 		exclude group: "org.hamcrest", module: "hamcrest-core"
