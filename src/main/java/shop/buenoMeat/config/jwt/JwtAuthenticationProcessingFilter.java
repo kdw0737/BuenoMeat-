@@ -19,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -44,6 +43,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         }
 
 
+        if (request.getRequestURI().equals(LOGOUT_URL)) {
+            return;
+        }
+
         // 사용자 요청 헤더에서 RefreshToken 추출
         // -> RefreshToken 이 없거나 유효하지 않다면(DB에 저장된 RefreshToken 과 다르다면) null 을 반환
         // 사용자의 요청 헤더에 RefreshToken 이 있는 경우는, AccessToken 이 만료되어 요청한 경우밖에 없다.
@@ -51,14 +54,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         String refreshToken = jwtService.extractRefreshToken(request)
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
-
-        if (request.getRequestURI().equals(LOGOUT_URL)) {
-            Optional<String> accessToken = jwtService.extractAccessToken(request);
-            Optional<String> email = jwtService.extractEmail(accessToken.get());
-            jwtService.updateRefreshToken(email.get(), refreshToken);
-            log.info("로그아웃 완료 및 리프레쉬 토큰 삭제 ");
-            return;
-        }
 
 
 

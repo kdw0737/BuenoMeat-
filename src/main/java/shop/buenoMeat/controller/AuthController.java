@@ -61,4 +61,12 @@ public class AuthController {
             }
         }
     }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        Optional<String> accessToken = jwtService.extractAccessToken(request);
+        Optional<String> email = jwtService.extractEmail(accessToken.get());
+        jwtService.updateRefreshToken(email.get(), "none");
+        return "로그아웃이 완료되었습니다.";
+    }
 }
