@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 import shop.buenoMeat.domain.Member;
 import shop.buenoMeat.repository.MemberRepository;
+import shop.buenoMeat.service.MemberService;
 
 
 import javax.servlet.FilterChain;
@@ -31,6 +32,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
@@ -51,9 +53,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .orElse(null);
 
         if (request.getRequestURI().equals(LOGOUT_URL)) {
-            Optional<String> accessToken = jwtService.extractAccessToken(request);
-            Optional<String> email = jwtService.extractEmail(accessToken.get());
-            jwtService.updateRefreshToken(email.get(), "none");
+            memberService.logout(request, refreshToken);
             log.info("로그아웃 완료 및 리프레쉬 토큰 삭제 ");
             return;
         }

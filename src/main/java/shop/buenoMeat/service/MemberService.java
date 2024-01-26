@@ -16,7 +16,9 @@ import shop.buenoMeat.dto.UpdateDto;
 import shop.buenoMeat.repository.MemberRepository;
 import shop.buenoMeat.repository.WishListRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -127,5 +129,12 @@ public class MemberService{
         return new LoginDto.socialLoginResponse(
                 "로그인에 성공하였습니다", member.getId(), member.getNickname(),member.getPoint()
         );
+    }
+
+    @Transactional
+    public void logout(HttpServletRequest request, String refreshToken) {
+        Optional<String> accessToken = jwtService.extractAccessToken(request);
+        Optional<String> email = jwtService.extractEmail(accessToken.get());
+        jwtService.updateRefreshToken(email.get(), "none");
     }
 }
