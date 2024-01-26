@@ -25,7 +25,7 @@ import java.util.Optional;
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String NO_CHECK_URL = "/socialLogin/token"; // "/login"으로 들어오는 요청은 Filter 작동 X
+    private static final String NO_CHECK_URL = "/socialLogin/token"; // "/soclaiLogin"으로 들어오는 요청은 Filter 작동 X
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
@@ -55,21 +55,15 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             //return; // RefreshToken 을 보낸 경우에는 AccessToken 을 재발급 하고 인증 처리는 하지 않게 하기위해 바로 return 으로 필터 진행 막기
             Optional<String> accessToken = jwtService.extractAccessToken(request);
             Optional<String> email = jwtService.extractEmail(accessToken.get());
-            List<Member> findMember = memberRepository.findByEmail(email.get());
-            if (findMember.get(0).getRefreshToken().equals(refreshToken)) {
-                findMember.get(0).updateRefreshToken("");
-            } else {
-                throw new IllegalArgumentException("refreshToken 이 일치하지 않습니다.");
-            }
+            jwtService.updateRefreshToken(email.get(), refreshToken);
             log.info("리프레쉬 토큰 삭제 완료");
+            return;
         }
 
         // RefreshToken 이 없거나 유효하지 않다면, AccessToken 을 검사하고 인증을 처리하는 로직 수행
         // AccessToken 이 없거나 유효하지 않다면, 인증 객체가 담기지 않은 상태로 다음 필터로 넘어가기 때문에 403 에러 발생
         // AccessToken 이 유효하다면, 인증 객체가 담긴 상태로 다음 필터로 넘어가기 때문에 인증 성공
-        if (refreshToken == null) {
-            checkAccessTokenAndAuthentication(request, response, filterChain);
-        }
+        checkAccessTokenAndAuthentication(request, response, filterChain);
     }
 
     /**
