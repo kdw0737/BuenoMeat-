@@ -133,5 +133,7 @@ public class MemberService{
             throw new IllegalArgumentException("refreshToken 이 일치하지 않습니다.");
         }
         findMember.updateRefreshToken("");
+        memberRepository.save(findMember); // 변경사항 저장
+        memberRepository.flush(); // DB에 적용
     }
 }
