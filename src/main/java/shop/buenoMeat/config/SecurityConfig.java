@@ -83,6 +83,13 @@ public class SecurityConfig {
                 //.antMatchers("/admin/**").hasRole("ADMIN")//관리자만 접근 가능
                 //.anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 .and()
+                .logout()
+                .logoutUrl("/auth/logout")  // 로그아웃 요청 경로
+                .logoutSuccessUrl("/")      // 로그아웃 성공 시 리다이렉트 경로
+                .invalidateHttpSession(true) // 세션 무효화 여부
+                .deleteCookies("JSESSIONID", "remember-me") // 로그아웃 시 삭제할 쿠키
+                .permitAll()  // 로그아웃 요청은 모두에게 허용
+                .and()
 
                 //== 소셜 로그인 설정 ==//
                 .oauth2Login()

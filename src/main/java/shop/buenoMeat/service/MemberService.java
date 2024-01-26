@@ -19,7 +19,7 @@ import shop.buenoMeat.repository.WishListRepository;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService{
@@ -127,18 +127,5 @@ public class MemberService{
         return new LoginDto.socialLoginResponse(
                 "로그인에 성공하였습니다", member.getId(), member.getNickname(),member.getPoint()
         );
-    }
-
-    //-- 리프레쉬 토큰 삭제 --//
-    @Transactional
-    public void logout(String refreshToken, Long memberId) {
-        Member findMember = memberRepository.findOne(memberId);
-        log.info("로그아웃 서비스단까지 전달");
-        if (!findMember.getRefreshToken().equals(refreshToken)) { //만약 refreshToken이 일치하지 않으면
-            throw new IllegalArgumentException("refreshToken 이 일치하지 않습니다.");
-        } else { // refreshToken이 일치하는 경우
-            log.info("로그아웃 토큰 업데이트 실행");
-            jwtService.updateRefreshToken(findMember.getEmail(), "none");
-        }
     }
 }
