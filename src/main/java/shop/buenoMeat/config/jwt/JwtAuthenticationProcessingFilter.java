@@ -28,7 +28,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private static final String NO_CHECK_URL = "/socialLogin/token"; // "/soclaiLogin"으로 들어오는 요청은 Filter 작동 X
 
-    private static final String LOGOUT_URL = "/logout"; // 로그아웃 요청시 작동
+    private static final String LOGOUT_URL = "/auth/logout"; // 로그아웃 요청시 작동
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
@@ -68,11 +68,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         if (refreshToken != null) {
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return; // RefreshToken 을 보낸 경우에는 AccessToken 을 재발급 하고 인증 처리는 하지 않게 하기위해 바로 return 으로 필터 진행 막기
-            /*Optional<String> accessToken = jwtService.extractAccessToken(request);
-            Optional<String> email = jwtService.extractEmail(accessToken.get());
-            jwtService.updateRefreshToken(email.get(), refreshToken);
-            log.info("리프레쉬 토큰 삭제 완료");
-            return;*/
         }
 
         // RefreshToken 이 없거나 유효하지 않다면, AccessToken 을 검사하고 인증을 처리하는 로직 수행
@@ -92,8 +87,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         Optional.ofNullable(memberRepository.findByRefreshToken(refreshToken))
                 .ifPresent(member -> {
                     String reIssuedRefreshToken = reIssueRefreshToken(member);
-                    jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(member.getEmail()),
-                            reIssuedRefreshToken);
+                    /*jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(member.getEmail()),
+                            reIssuedRefreshToken);*/
                 });
 
         }
@@ -104,6 +99,12 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      * DB에 재발급한 리프레시 토큰 업데이트 후 Flush
      */
     private String reIssueRefreshToken(Member member) {
+        if (member == null) {
+            // 로그아웃 처리
+            log.info("로그아웃 완료");
+            return "none";
+        }
+
         String reIssuedRefreshToken = jwtService.createRefreshToken();
         member.updateRefreshToken(reIssuedRefreshToken);
         log.info("refreshToken 재발급 및 최신화");
