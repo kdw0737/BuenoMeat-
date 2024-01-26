@@ -27,6 +27,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private static final String NO_CHECK_URL = "/socialLogin/token"; // "/soclaiLogin"으로 들어오는 요청은 Filter 작동 X
 
+    private static final String LOGOUT_URL = "/logout"; // 로그아웃 요청시 작동
+
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
 
@@ -39,6 +41,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             return; // return 으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
         }
 
+
         // 사용자 요청 헤더에서 RefreshToken 추출
         // -> RefreshToken 이 없거나 유효하지 않다면(DB에 저장된 RefreshToken 과 다르다면) null 을 반환
         // 사용자의 요청 헤더에 RefreshToken 이 있는 경우는, AccessToken 이 만료되어 요청한 경우밖에 없다.
@@ -47,17 +50,27 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
 
+        if (request.getRequestURI().equals(LOGOUT_URL)) {
+            Optional<String> accessToken = jwtService.extractAccessToken(request);
+            Optional<String> email = jwtService.extractEmail(accessToken.get());
+            jwtService.updateRefreshToken(email.get(), refreshToken);
+            log.info("로그아웃 완료 및 리프레쉬 토큰 삭제 ");
+            return;
+        }
+
+
+
         // 리프레시 토큰이 요청 헤더에 존재했다면, 사용자가 AccessToken 이 만료되어서
         // RefreshToken 까지 보낸 것이므로 리프레시 토큰이 DB의 리프레시 토큰과 일치하는지 판단 후,
         // 일치한다면 AccessToken 을 재발급해준다.
         if (refreshToken != null) {
-            //checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
-            //return; // RefreshToken 을 보낸 경우에는 AccessToken 을 재발급 하고 인증 처리는 하지 않게 하기위해 바로 return 으로 필터 진행 막기
-            Optional<String> accessToken = jwtService.extractAccessToken(request);
+            checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
+            return; // RefreshToken 을 보낸 경우에는 AccessToken 을 재발급 하고 인증 처리는 하지 않게 하기위해 바로 return 으로 필터 진행 막기
+            /*Optional<String> accessToken = jwtService.extractAccessToken(request);
             Optional<String> email = jwtService.extractEmail(accessToken.get());
             jwtService.updateRefreshToken(email.get(), refreshToken);
             log.info("리프레쉬 토큰 삭제 완료");
-            return;
+            return;*/
         }
 
         // RefreshToken 이 없거나 유효하지 않다면, AccessToken 을 검사하고 인증을 처리하는 로직 수행
