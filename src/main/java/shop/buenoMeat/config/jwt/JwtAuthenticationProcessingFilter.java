@@ -53,7 +53,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .orElse(null);
 
         if (request.getRequestURI().equals(LOGOUT_URL)) {
-            memberService.logout(request, refreshToken);
+            Optional<String> accessToken = jwtService.extractAccessToken(request);
+            Optional<String> email = jwtService.extractEmail(accessToken.get());
+            memberService.logout(refreshToken, email.get());
             log.info("로그아웃 완료 및 리프레쉬 토큰 삭제 ");
             return;
         }

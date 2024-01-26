@@ -28,7 +28,6 @@ public class MemberService{
     private final MemberRepository memberRepository;
     private final WishListRepository wishListRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
     //-- 회원가입 --//
     @Transactional
@@ -132,9 +131,8 @@ public class MemberService{
     }
 
     @Transactional
-    public void logout(HttpServletRequest request, String refreshToken) {
-        Optional<String> accessToken = jwtService.extractAccessToken(request);
-        Optional<String> email = jwtService.extractEmail(accessToken.get());
-        jwtService.updateRefreshToken(email.get(), "none");
+    public void logout(String refreshToken, String email) {
+        Member findMember = memberRepository.findByEmail(email).get(0);
+        findMember.updateRefreshToken(refreshToken);
     }
 }
