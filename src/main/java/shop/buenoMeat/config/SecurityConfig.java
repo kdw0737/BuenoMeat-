@@ -26,7 +26,6 @@ import shop.buenoMeat.config.OAuth.OAuth2LoginFailureHandler;
 import shop.buenoMeat.config.OAuth.OAuth2LoginSuccessHandler;
 import shop.buenoMeat.config.jwt.*;
 import shop.buenoMeat.repository.MemberRepository;
-import shop.buenoMeat.service.MemberService;
 import shop.buenoMeat.service.SocialLoginService;
 
 @EnableWebSecurity
@@ -38,7 +37,6 @@ public class SecurityConfig {
     private final SocialLoginService socialLoginService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-    private final MemberService memberService;
     private final ObjectMapper objectMapper;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
@@ -148,7 +146,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, memberRepository, memberService);
+        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
         return jwtAuthenticationFilter;
     }
 

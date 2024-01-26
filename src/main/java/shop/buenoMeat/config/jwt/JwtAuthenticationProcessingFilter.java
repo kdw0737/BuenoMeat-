@@ -8,10 +8,10 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.OncePerRequestFilter;
 import shop.buenoMeat.domain.Member;
 import shop.buenoMeat.repository.MemberRepository;
-import shop.buenoMeat.service.MemberService;
 
 
 import javax.servlet.FilterChain;
@@ -32,11 +32,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-    private final MemberService memberService;
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
+    @Transactional
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getRequestURI().equals(NO_CHECK_URL)) {
             filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
@@ -55,7 +55,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         if (request.getRequestURI().equals(LOGOUT_URL)) {
             Optional<String> accessToken = jwtService.extractAccessToken(request);
             Optional<String> email = jwtService.extractEmail(accessToken.get());
-            memberService.logout(refreshToken, email.get());
+            jwtService.updateRefreshToken(email.get(), refreshToken);
             log.info("로그아웃 완료 및 리프레쉬 토큰 삭제 ");
             return;
         }

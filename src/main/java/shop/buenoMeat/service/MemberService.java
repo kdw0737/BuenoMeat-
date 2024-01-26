@@ -126,10 +126,4 @@ public class MemberService{
                 "로그인에 성공하였습니다", member.getId(), member.getNickname(),member.getPoint()
         );
     }
-
-    @Transactional
-    public void logout(String refreshToken, String email) {
-        Member findMember = memberRepository.findByEmail(email).get(0);
-        findMember.updateRefreshToken(refreshToken);
-    }
 }
