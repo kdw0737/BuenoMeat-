@@ -3,11 +3,8 @@ package shop.buenoMeat.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.filters.CorsFilter;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -29,10 +26,8 @@ import shop.buenoMeat.config.OAuth.OAuth2LoginFailureHandler;
 import shop.buenoMeat.config.OAuth.OAuth2LoginSuccessHandler;
 import shop.buenoMeat.config.jwt.*;
 import shop.buenoMeat.repository.MemberRepository;
+import shop.buenoMeat.service.MemberService;
 import shop.buenoMeat.service.SocialLoginService;
-
-import java.util.Arrays;
-import java.util.List;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -43,6 +38,7 @@ public class SecurityConfig {
     private final SocialLoginService socialLoginService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final ObjectMapper objectMapper;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
@@ -152,7 +148,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, memberRepository, memberService);
         return jwtAuthenticationFilter;
     }
 
