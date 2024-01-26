@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.buenoMeat.config.jwt.JwtService;
 import shop.buenoMeat.domain.Member;
 import shop.buenoMeat.domain.WishList;
 import shop.buenoMeat.dto.ConvertToDto;
@@ -23,6 +24,7 @@ public class MemberService{
     private final MemberRepository memberRepository;
     private final WishListRepository wishListRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     //-- 회원가입 --//
     @Transactional
@@ -131,9 +133,8 @@ public class MemberService{
         Member findMember = memberRepository.findOne(memberId);
         if (!findMember.getRefreshToken().equals(refreshToken)) { //만약 refreshToken이 일치하지 않으면
             throw new IllegalArgumentException("refreshToken 이 일치하지 않습니다.");
+        } else { // refreshToken이 일치하는 경우
+            jwtService.updateRefreshToken(findMember.getEmail(), "none");
         }
-        findMember.updateRefreshToken("");
-        memberRepository.save(findMember); // 변경사항 저장
-        memberRepository.flush(); // DB에 적용
     }
 }
