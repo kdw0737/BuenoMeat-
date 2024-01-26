@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.buenoMeat.config.jwt.JwtService;
 import shop.buenoMeat.domain.Member;
 import shop.buenoMeat.domain.WishList;
 import shop.buenoMeat.dto.ConvertToDto;
@@ -16,9 +15,7 @@ import shop.buenoMeat.dto.UpdateDto;
 import shop.buenoMeat.repository.MemberRepository;
 import shop.buenoMeat.repository.WishListRepository;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
