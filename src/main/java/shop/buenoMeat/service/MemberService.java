@@ -128,8 +128,6 @@ public class MemberService{
                 "로그인에 성공하였습니다", member.getId(), member.getNickname(),member.getPoint()
         );
     }
-<<<<<<< HEAD
-=======
 
     //-- 리프레쉬 토큰 삭제 --//
     @Transactional
@@ -143,5 +141,4 @@ public class MemberService{
             jwtService.updateRefreshToken(findMember.getEmail(), "none");
         }
     }
->>>>>>> e80057beadd71152e2e1a08049cea5508a47a636
 }
