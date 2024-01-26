@@ -1,10 +1,12 @@
 package shop.buenoMeat.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.buenoMeat.config.jwt.JwtService;
 import shop.buenoMeat.domain.Member;
 import shop.buenoMeat.domain.WishList;
 import shop.buenoMeat.dto.ConvertToDto;
@@ -19,10 +21,12 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService{
     private final MemberRepository memberRepository;
     private final WishListRepository wishListRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     //-- 회원가입 --//
     @Transactional
@@ -129,11 +133,12 @@ public class MemberService{
     @Transactional
     public void logout(String refreshToken, Long memberId) {
         Member findMember = memberRepository.findOne(memberId);
+        log.info("로그아웃 서비스단까지 전달");
         if (!findMember.getRefreshToken().equals(refreshToken)) { //만약 refreshToken이 일치하지 않으면
             throw new IllegalArgumentException("refreshToken 이 일치하지 않습니다.");
+        } else { // refreshToken이 일치하는 경우
+            log.info("로그아웃 토큰 업데이트 실행");
+            jwtService.updateRefreshToken(findMember.getEmail(), "none");
         }
-        findMember.updateRefreshToken("");
-        memberRepository.save(findMember); // 변경사항 저장
-        memberRepository.flush(); // DB에 적용
     }
 }
