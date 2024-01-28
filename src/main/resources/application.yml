@@ -1,5 +1,5 @@
 jwt:
-  secretKey: 1351GNCLPQMmmvlknq5164vasd51v12w21g59z451sdfg
+  secretKey: ********************
 
   access:
     expiration: 30000  #1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))  -> 테스트를 위해 30초로 설정
@@ -13,8 +13,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: kdw981129@gmail.com
-    password: dswutacqunpqoyng
+    username: **
+    password: **
     properties:
       mail:
         smtp:
@@ -24,9 +24,9 @@ spring:
     auth-code-expiration-millis: 30000  # 5 * 60 * 1000 == 5분
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://bueno-mysql.cncu2ge0ew83.ap-northeast-2.rds.amazonaws.com:3306/bueno_mysql?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: admin
-    password: rlaehdnr1!
+    url: **
+    username: **
+    password: **
   output:
     ansi:
       enabled: always
@@ -53,29 +53,29 @@ spring:
       client:
         registration:
           google:
-            client-id: 400343317317-q578cmjeq6fs89ejb0adtnv0abnnp20o.apps.googleusercontent.com
-            client-secret: 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
+            client-id: **
+            client-secret: **
             scope:
               - email
               - profile
           kakao:
-            client-id: 490dee55182d107a91221c2bb42d91f2
-            client-secret: 2uVlCFU0HyREVxT5hbO41GhoQGW0xD1x
+            client-id: **
+            client-secret: **
             scope:
               - profile_nickname
               - account_email
             client-name: kakao  # 원래 대문자였음. 오류 뜰 시 대문자로 수정
             authorization-grant-type: authorization_code
             client-authentication-method: POST #카카오는 필수 파라미터를 POST로 요청해야됌!
-            redirect-uri: http://ec2-43-201-122-183.ap-northeast-2.compute.amazonaws.com/login/oauth2/code/kakao
+            redirect-uri: **
 
 
         provider:
           kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: kakao_account
+            authorization-uri: **
+            token-uri: **
+            user-info-uri: **
+            user-name-attribute: **
 
           # 스프링 OAuth2-client 라이브러리의 provider 에는 구글,페이스북,트위터가 속해있어 redirect-uri , authorization-grant-type 를 적어주지 않아도 자동으로 고정적으로 등록되어 있다.(적어줘도 된다.) ex) /login/oauth2/facebook, google 로 고정
           # 하지만 네이버나 카카오톡은 Provider 가 아니기 때문에 적어주어야된다. 원하는대로 uri 를 지정할수 있다, 고정되어 있지 않다.
@@ -85,10 +85,10 @@ logging:
 cloud:
   aws:
     credentials:
-      accessKey: AKIAVXX7SSZKBKKDEIQ3
-      secretKey: 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
+      accessKey: **
+      secretKey: **
     s3:
-      bucket: buenoimg
+      bucket: **
     region:
       static: ap-northeast-2
     stack:
