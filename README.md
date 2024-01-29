@@ -18,6 +18,17 @@
 > Server
 > > - 이름: 김도욱 (서경대학교 컴퓨터공학과 4학년 휴학중)
 
+## ⭐ 개발환경
+|종류|환경|
+|------|---|
+|언어|Java(JDK11), Typescript, Html(es6)|
+|프레임워크|Spring Boot, Spring Security, React.js|
+|서버|Amazon EC2, AWS S3|
+|DB|MYSQL, JPA, Amazon RDS|
+|IDE 및 TOOL|Intellij IDEA, Visual Studio Code, MYSQL Workbench|
+|API 및 라이브러리|Restful API, OAuth2, React-redux, tailwindcss|
+
+
 
 # 🖨️ 협업 방식
 1.  원격저장소를 fork로 받아와서 자신의 원격저장소에서 작업을 합니다.
