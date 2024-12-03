@@ -56,6 +56,7 @@
 
 
 <img width="1339" alt="스크린샷 2023-11-17 오후 4 07 33" src="https://github.com/bigone-77/Bueno-meat-app/assets/106367655/c7037728-9fae-4654-a8f6-e219c29ea7bd">
+
 ![image](https://github.com/user-attachments/assets/c014a6a7-2617-41f1-925a-456d9f889f2d)
 ![image](https://github.com/user-attachments/assets/bfe3aacb-5fec-4852-b7b2-ad54a988a5d8)
 ![image](https://github.com/user-attachments/assets/9649f2cb-a249-4fd1-87db-d3358cc6059c)
